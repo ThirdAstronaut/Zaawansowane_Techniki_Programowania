@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+    <link rel="stylesheet" th:href="@{/style.css}" />
+</head>
+<body>
+<!--/*@thymesVar id="book" type="com.pwr.ztp_lab.models.Book"*/-->
+<!--<form name="bookForm" id="bookForm" action="#" th:action="@{/books}" th:object="${book}" method="post">
+
+<label for="titleInput" >Title: </label>
+    <input type="text" id="titleInput" th:field="*{title}" required />
+    <label for="isbnInput" >ISBN: </label>
+    <input type="text" id="isbnInput" th:field="*{isbn}" required />
+    <label for="authorInput" >Author: </label>
+    <input type="text" id="authorInput" th:field="*{author}" required />
+    <button type="submit" id="acceptButton">Accept</button>
+</form>
+-->
+<table>
+    <tr>
+        <td>Book id</td>
+        <td>Book title</td>
+        <td>Book isbn</td>
+        <td>Book author</td>
+    </tr>
+    <tr></tr>
+    <th:block th:each="book : ${books}">
+        <tr>
+            <td th:text="${book.id}"></td>
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.isbn}"></td>
+            <td th:text="${book.author}"></td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>

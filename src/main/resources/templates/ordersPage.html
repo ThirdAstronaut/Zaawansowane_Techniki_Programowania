@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <link rel="stylesheet" th:href="@{/style.css}" />
+</head>
+<body>
+<!--/*@thymesVar id="order" type="com.pwr.ztp_lab.models.Order"*/-->
+<!--/*@thymesVar id="bookId" type="long"*/-->
+<!--<form name="ordersForm" id="ordersForm" action="#" th:action="@{/books/${bookId}/orders}" th:object="${order}" method="post">
+
+<label for="nameInput" >Name: </label>
+    <input type="text" id="nameInput" th:field="*{name}" required />
+    <label for="dateInput" >Date: </label>
+    <input type="date" id="dateInput" th:field="*{date}" required />
+    <label for="bookIdInput" >Book id: </label>
+    <input type="number" id="bookIdInput" required th:field="*{bookId}"/>
+    <button type="submit" id="acceptButton">Accept</button>
+</form>-->
+
+<table>
+    <tr>
+        <td>Order id</td>
+        <td>Order name</td>
+        <td>Order date</td>
+        <td>Book id</td>
+    </tr>
+    <tr></tr>
+    <th:block th:each="order : ${orders}">
+        <tr>
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.name}"></td>
+            <td th:text="${order.date}"></td>
+            <td th:text="${order.book.id}"></td>
+        </tr>
+    </th:block>
+</table>
+</body>
+</html>
