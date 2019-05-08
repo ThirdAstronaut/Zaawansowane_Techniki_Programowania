@@ -1,20 +1,30 @@
 package com.pwr.ztp_lab.controllers;
 
+import com.pwr.ztp_lab.models.Book;
+import com.pwr.ztp_lab.repositories.BookRepository;
 import com.pwr.ztp_lab.repositories.CustomRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 @Slf4j
 @Controller
 public class BookController {
 
-    private final CustomRepository<com.pwr.ztp_lab.models.Book> bookRepository;
+    private final BookRepository bookRepository;
 
     @Autowired
-    public BookController(CustomRepository<com.pwr.ztp_lab.models.Book> bookRepository) {
+    public BookController(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
@@ -47,4 +57,20 @@ public class BookController {
         bookRepository.update(book, bookId);
         return "redirect:/books";
     }
+
+    @ResponseBody
+    @GetMapping(value = "/titles",  produces = MediaType.APPLICATION_JSON_VALUE)
+    public Set<String> getTitles(){
+        return bookRepository.getAllTitles();
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/author/{author}",  produces = MediaType.APPLICATION_JSON_VALUE)
+    public Stream<Book> getBooksByAuthor(@PathVariable(value = "author")String author){
+        return bookRepository.getBooksByAuthor(author);
+    }
+
+
+
+
 }

@@ -9,13 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Repository
 @Transactional(readOnly = true)
-public class OrderRepositoryImpl implements CustomRepository<Order>, OrderRepository{
+public class OrderRepositoryImpl implements OrderRepository {
 
     private final EntityManager entityManager;
 
@@ -27,21 +26,21 @@ public class OrderRepositoryImpl implements CustomRepository<Order>, OrderReposi
     @Transactional
     @Override
     public void save(Order order) {
-entityManager.persist(order);
+        entityManager.persist(order);
     }
 
     @Override
     public Optional<Order> findById(Long id) {
         TypedQuery<com.pwr.ztp_lab.models.Order> q =
                 entityManager.createQuery("SELECT o FROM com.pwr.ztp_lab.models.Order o where o.id = " + id, com.pwr.ztp_lab.models.Order.class);
-        try{
+        try {
             return Optional.ofNullable(q.getSingleResult());
-        } catch(NoResultException e){
+        } catch (NoResultException e) {
             return Optional.empty();
         }
     }
 
-    public Iterable<Order> findByBookId(Long bookId){
+    public Iterable<Order> findByBookId(Long bookId) {
         TypedQuery<Order> q =
                 entityManager.createQuery("SELECT o FROM com.pwr.ztp_lab.models.Order o  where o.book = " + bookId, com.pwr.ztp_lab.models.Order.class);
 
@@ -79,7 +78,7 @@ entityManager.persist(order);
         if (o != null) {
             o.setName(order.getName());
             o.setOrderDate(order.getDate());
- //           o.setBook(order.getBook());
+            //           o.setBook(order.getBook());
             entityManager.persist(o);
         }
     }

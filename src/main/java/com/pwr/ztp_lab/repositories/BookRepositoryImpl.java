@@ -1,5 +1,6 @@
 package com.pwr.ztp_lab.repositories;
 
+import com.pwr.ztp_lab.models.Book;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,11 +11,12 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Repository
 @Transactional(readOnly = true)
-public class BookRepositoryImpl implements CustomRepository<com.pwr.ztp_lab.models.Book> {
+public class BookRepositoryImpl implements BookRepository {
 
     private final EntityManager entityManager;
 
@@ -61,6 +63,17 @@ public class BookRepositoryImpl implements CustomRepository<com.pwr.ztp_lab.mode
 
         log.info("delete" + b);
     }
+
+    public Optional<Book> findByIsbn(String isbn) {
+        Optional<Book> book = Optional.empty();
+
+            TypedQuery<com.pwr.ztp_lab.models.Book> q =
+                    entityManager.createQuery("SELECT b FROM com.pwr.ztp_lab.models.Book b where b.isbn = " + isbn, com.pwr.ztp_lab.models.Book.class);
+
+    return Optional.ofNullable(q.getSingleResult());
+    }
+
+
 
 
     @Transactional
