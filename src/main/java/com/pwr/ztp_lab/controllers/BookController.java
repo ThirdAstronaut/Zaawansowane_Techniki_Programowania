@@ -1,19 +1,17 @@
 package com.pwr.ztp_lab.controllers;
 
+import com.pwr.ztp_lab.DTO.BookDto;
 import com.pwr.ztp_lab.models.Book;
 import com.pwr.ztp_lab.repositories.BookRepository;
-import com.pwr.ztp_lab.repositories.CustomRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -23,6 +21,7 @@ public class BookController {
 
     private final BookRepository bookRepository;
 
+
     @Autowired
     public BookController(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
@@ -31,7 +30,14 @@ public class BookController {
     /* BOOKS RETRIVE */
     @GetMapping(value = "/books")
     public String allBooks(Model model) {
-        model.addAttribute("books", bookRepository.findAll());
+        if (!model.containsAttribute("bookToSearch"))
+            model.addAttribute("bookToSearch", new BookDto());
+
+
+        if (!model.containsAttribute("books"))
+            model.addAttribute("books", bookRepository.findAll());
+
+
         model.addAttribute("book", new com.pwr.ztp_lab.models.Book());
         log.debug("Książka" + bookRepository.findAll());
         return "booksPage";
@@ -59,18 +65,31 @@ public class BookController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/titles",  produces = MediaType.APPLICATION_JSON_VALUE)
-    public Set<String> getTitles(){
+    @GetMapping(value = "/titles", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Set<String> getTitles() {
         return bookRepository.getAllTitles();
     }
 
     @ResponseBody
-    @GetMapping(value = "/author/{author}",  produces = MediaType.APPLICATION_JSON_VALUE)
-    public Stream<Book> getBooksByAuthor(@PathVariable(value = "author")String author){
+    @GetMapping(value = "/author/{author}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Stream<Book> getBooksByAuthor(@PathVariable(value = "author") String author) {
         return bookRepository.getBooksByAuthor(author);
     }
 
 
+    @GetMapping("/find_book")
+    public String processFindForm(BookDto bookDto, Model model, RedirectAttributes redirectAttributes) {
+
+        if (bookDto.getTitle() == null) {
+            bookDto.setTitle("");
+        }
+        Collection<Book> results = this.bookRepository.findPostsByTitleContaining(bookDto.getTitle());
+
+        model.addAttribute("books", results);
+        redirectAttributes.addFlashAttribute("books", results);
+
+        return "redirect:/books";
+    }
 
 
 }

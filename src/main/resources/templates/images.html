@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+    <link rel="stylesheet" th:href="@{/style.css}" />
+</head>
+<body>
+<div class="row">
+    <div class="col-sm-3 my-2 d-flex align-content-stretch flex-wrap" th:each="image : ${images}">
+        <div class="card">
+            <img th:src="${image.encodedImg} == null ? _ : @{'data:image/png;base64,'+${image.encodedImg}}">
+            <td th:text="${image.fileName}"></td>
+            <td th:text="${image.uploadTime}"></td>
+
+        </div>
+    </div>
+</body>
+</html>

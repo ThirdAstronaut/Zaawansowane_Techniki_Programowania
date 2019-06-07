@@ -2,8 +2,11 @@ package com.pwr.ztp_lab.repositories;
 
 import com.pwr.ztp_lab.models.Book;
 import org.apache.log4j.Logger;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -30,13 +33,6 @@ public interface BookRepository extends CustomRepository<Book> {
     private void logDebug(String message) {
         logger.debug(message);
     }
-
-
-/*    default Optional<Book> getBookByIsbn(String isbn) {
-        Optional<Book> book = Optional.empty();
-
-        return StreamSupport.stream(findAll().spliterator(), false).filter(book -> book.getTitle().equals(title)).count();
-    }*/
-
+    Collection<Book> findPostsByTitleContaining(String title);
 
 }

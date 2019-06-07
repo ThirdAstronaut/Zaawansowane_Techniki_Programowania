@@ -2,6 +2,7 @@ package com.pwr.ztp_lab.repositories;
 
 import com.pwr.ztp_lab.models.Book;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -89,5 +91,16 @@ public class BookRepositoryImpl implements BookRepository {
             b.setTitle(book.getTitle());
             entityManager.persist(b);
         }
+    }
+
+
+    public List<Book> findPostsByTitleContaining(String title){
+        String queryParam = "\'%" + title + "%\'";
+         TypedQuery<com.pwr.ztp_lab.models.Book> q =
+                entityManager.createQuery("SELECT b FROM com.pwr.ztp_lab.models.Book b WHERE UPPER(b.title) LIKE UPPER("+queryParam+")", com.pwr.ztp_lab.models.Book.class);
+
+        List<com.pwr.ztp_lab.models.Book> results = q.getResultList();
+        return results;
+
     }
 }

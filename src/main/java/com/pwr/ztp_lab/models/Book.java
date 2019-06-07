@@ -1,5 +1,6 @@
 package com.pwr.ztp_lab.models;
 
+import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @ToString
+@Getter
 public class Book implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +27,15 @@ public class Book implements Serializable {
     @NotNull
     private String author;
 
+
     public Book() { }
+
 
     public Book(@NotNull String title, @NotNull String isbn, @NotNull String author) {
         this.title = title;
         this.isbn = isbn;
         this.author = author;
     }
-
     public String getTitle() {
         return title;
     }
